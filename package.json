@@ -1,0 +1,17 @@
+{
+  "name": "pointwise-quote-receiver",
+  "version": "1.0.0",
+  "private": true,
+  "description": "顺序可靠的本地行情接收台：WebSocket 推送 + 按序号补查 + 缺口暂存 + 原子落盘恢复",
+  "type": "module",
+  "engines": {
+    "node": ">=21"
+  },
+  "scripts": {
+    "start": "node server/quote-server.cjs",
+    "test": "node --test \"test/**/*.test.js\"",
+    "test:unit": "node --test test/engine.test.js",
+    "test:e2e": "node --test test/e2e.test.js"
+  },
+  "license": "MIT"
+}

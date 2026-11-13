@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>行情接收台 · 顺序可靠投递演示</title>
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <span class="logo">◈</span>
+    <div>
+      <h1>行情接收台</h1>
+      <p class="sub">本地 WebSocket 接入 · 按序号顺序投递 · 缺口补查 · 落盘恢复</p>
+    </div>
+  </div>
+  <div class="conn" id="connBadge">
+    <span class="dot"></span><span id="connText">未启动</span>
+  </div>
+</header>
+
+<section class="toolbar">
+  <div class="group">
+    <button id="btnStart" class="primary">启动接收</button>
+    <button id="btnStop" disabled>关闭接收</button>
+    <button id="btnClear" class="ghost" title="清空本地落盘数据">清空落盘</button>
+  </div>
+  <div class="group fault">
+    <span class="fault-label">故障注入（作用于服务端）</span>
+    <button id="btnDisconnect" class="warn">断开连接</button>
+    <button id="btnBlackhole" class="warn">断网 <span id="bhState">关</span></button>
+  </div>
+</section>
+
+<main class="layout">
+  <section class="cards" id="cards" aria-label="交易对报价卡片"></section>
+
+  <section class="detail" id="detail">
+    <div class="detail-empty" id="detailEmpty">点击左侧任一交易对，查看逐条消息、来源序号与生效原因</div>
+    <div class="detail-body" id="detailBody" hidden>
+      <div class="detail-head">
+        <div>
+          <h2 id="dSymbol"></h2>
+          <p class="sub" id="dMeta"></p>
+        </div>
+        <div class="detail-actions">
+          <button id="btnDup" class="warn small">插入重复消息</button>
+          <button id="btnReorder" class="warn small">插入乱序消息</button>
+          <button id="btnConflict" class="danger small">注入同序号冲突</button>
+          <button id="btnDeleteGap" class="danger small">删除 3 条历史</button>
+          <button id="btnSkip" class="ghost small" hidden>承认缺口并跳过</button>
+        </div>
+      </div>
+
+      <div class="banner" id="banner" hidden></div>
+
+      <div class="stats">
+        <div class="stat"><span>已应用序号</span><strong id="sApplied">–</strong></div>
+        <div class="stat"><span>暂存消息</span><strong id="sPending">–</strong></div>
+        <div class="stat"><span>补查次数</span><strong id="sBackfill">–</strong></div>
+        <div class="stat"><span>冲突</span><strong id="sConflict">–</strong></div>
+        <div class="stat"><span>落盘条数</span><strong id="sStored">–</strong></div>
+      </div>
+
+      <div class="latest" id="latestBox">
+        <div class="latest-price"><span id="lPrice">–</span><small id="lReason"></small></div>
+        <div class="latest-grid">
+          <div><span>买一价</span><b id="lBid">–</b></div>
+          <div><span>卖一价</span><b id="lAsk">–</b></div>
+          <div><span>成交量</span><b id="lVol">–</b></div>
+          <div><span>来源 / 序号</span><b id="lSource">–</b></div>
+        </div>
+      </div>
+
+      <div class="conflicts" id="conflictBox" hidden>
+        <h3>同序号内容冲突（未自动取舍）</h3>
+        <div id="conflictList"></div>
+      </div>
+
+      <h3 class="msg-title">逐条消息 <small id="msgHint"></small></h3>
+      <div class="messages" id="msgList"></div>
+    </div>
+  </section>
+</main>
+
+<div class="toast" id="toast" hidden></div>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>
